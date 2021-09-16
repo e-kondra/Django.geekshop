@@ -1,13 +1,18 @@
 from django.shortcuts import render
+import datetime
 
 
 # Create your views here.
 def index(request):
-    return render(request, 'mainapp/index.html')
+    context = {
+        'date': datetime.date.today(),
+    }
+    return render(request, 'mainapp/index.html', context)
 
 
 def products(request):
     context = {
+        'date': datetime.date.today(),
         'products_list': [
             {'src': 'vendor/img/products/Adidas-hoodie.png',
              'name': 'Худи черного цвета с монограммами adidas Originals',
