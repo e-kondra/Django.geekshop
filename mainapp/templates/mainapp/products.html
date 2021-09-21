@@ -34,13 +34,13 @@
                     </ol>
                     <div class="carousel-inner" role="listbox">
                         <div class="carousel-item active">
-                            <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-1.jpg' %}" alt="First slide">
+                            <img class="d-block img-fluid" src="/media/{{ 'slides/slide-1.jpg' }}" alt="First slide">
                         </div>
                         <div class="carousel-item">
-                            <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-2.jpg' %}" alt="Second slide">
+                            <img class="d-block img-fluid" src="/media/{{ 'slides/slide-2.jpg' }}" alt="Second slide">
                         </div>
                         <div class="carousel-item">
-                            <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-3.jpg' %}" alt="Third slide">
+                            <img class="d-block img-fluid" src="/media/{{ 'slides/slide-3.jpg' }}" alt="Third slide">
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -58,7 +58,7 @@
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card h-100">
                                 <a href="#">
-                                    <img class="card-img-top" src="{% static prod.src %}" alt="">
+                                    <img class="card-img-top" src="/media/{{ prod.image }}" alt="">
                                 </a>
                                 <div class="card-body">
                                     <h4 class="card-title">

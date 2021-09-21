@@ -2,6 +2,9 @@ from django.shortcuts import render
 import datetime
 import os, json
 
+from .models import Product,ProductCategory
+
+
 MODULE_DIR = os.path.dirname(__file__)  # директория проекта
 
 
@@ -16,10 +19,16 @@ def index(request):
 
 def products(request):
     file_path = os.path.join(MODULE_DIR, 'fixtures/db.json')
+    products = Product.objects.all()
+    categories = ProductCategory.objects.all()
     context = {
         'title': 'products',
         'date': datetime.date.today(),
-        'products': json.load(open(file_path, encoding="utf-8")),
+        'products': products,
+        'categories': categories,
+        # загрузка из json
+        # 'products': json.load(open(file_path, encoding="utf-8")),
+        # заполнение вручную
         # 'products_list': [
         #    {'src': 'vendor/img/products/Adidas-hoodie.png',
         #     'name': 'Худи черного цвета с монограммами adidas Originals',
