@@ -31,10 +31,9 @@ class Command(BaseCommand):
             category = prod.get('category')
             # Получаем категорию
             _category = ProductCategory.objects.get(id=category)
-            # Заменяем название категории объектом
-            product['category'] = _category
+            prod['category'] = _category
             new_product = Product(**prod)
             new_product.save()
 
         # Создаем суперпользователя при помощи менеджера модели
-        super_user = User.objects.create_superuser('django', 'django@geekshop.local', 'geekbrains')
+        #super_user = User.objects.create_superuser('django', 'django@geekshop.local', 'geekbrains')
