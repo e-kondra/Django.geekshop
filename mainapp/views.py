@@ -18,14 +18,12 @@ def index(request):
 
 
 def products(request):
-    file_path = os.path.join(MODULE_DIR, 'fixtures/db.json')
-    products = Product.objects.all()
-    categories = ProductCategory.objects.all()
+    # file_path = os.path.join(MODULE_DIR, 'fixtures/db.json')
     context = {
         'title': 'products',
         'date': datetime.date.today(),
-        'products': products,
-        'categories': categories,
+        'products': Product.objects.all(),
+        'categories': ProductCategory.objects.all(),
         # загрузка из json
         # 'products': json.load(open(file_path, encoding="utf-8")),
         # заполнение вручную
