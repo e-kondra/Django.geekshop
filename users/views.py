@@ -4,7 +4,7 @@ from django.urls import reverse
 import django.contrib.messages as messages
 
 # Create your views here.
-from users.forms import UserLoginForm, UserRegisterForm
+from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 
 
 def login(request):
@@ -48,11 +48,10 @@ def register(request):
 
 
 def profile(request):
-    # if request.method == 'POST':
-        # form = UserRegisterForm(data=request.POST)
 
     context = {
-        'title': 'Geekshop - Профайл'
+        'title': 'Geekshop - Профайл',
+        'form': UserProfileForm()
     }
     return render(request, 'users/profile.html', context)
 
