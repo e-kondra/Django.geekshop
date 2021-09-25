@@ -17,8 +17,6 @@ def login(request):
                 auth.login(request, user)  # авторизовываем
                 return HttpResponseRedirect(
                     reverse('index'))  # перенаправление :reverse('index') - путь до страницы сайта index
-        else:
-            print(form.errors)  # ошибки формы
     else:
         form = UserLoginForm()  # если форма невалидна, возвращаем пустую форму в контекст
 
@@ -36,8 +34,8 @@ def register(request):
             form.save()
             return HttpResponseRedirect(
                 reverse('users:login'))  # перенаправление :reverse('index') - путь до страницы сайта входа пользователя
-        else:
-            print(form.errors)  # ошибки формы
+        # else:
+        #     print(form.errors)  # ошибки формы теперь обрабатываем в html через динамич.шаблоны
     else:
         form = UserRegisterForm()  # если форма невалидна, возвращаем пустую форму в контекст
     context = {
