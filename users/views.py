@@ -33,7 +33,7 @@ def register(request):
         form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request,'Регистрация успешна!')
+            messages.success(request, 'Регистрация успешна!')
             return HttpResponseRedirect(
                 reverse('users:login'))  # перенаправление :reverse('index') - путь до страницы сайта входа пользователя
         # else:
@@ -48,10 +48,18 @@ def register(request):
 
 
 def profile(request):
-
+    if request.method == 'POST':  # пост-запрос на сохранение измененных данных
+        form = UserProfileForm(data=request.POST,
+                               instance=request.user,  # в параметре instance передаем какого юзера обновлять
+                               files=request.FILES) # указываем, что необходимо сохранять и файлы
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+        else:
+            print(form.errors)
     context = {
         'title': 'Geekshop - Профайл',
-        'form': UserProfileForm()
+        'form': UserProfileForm(instance=request.user)  # параметр instance позволяет передать данные из пользователя
     }
     return render(request, 'users/profile.html', context)
 
