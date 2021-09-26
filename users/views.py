@@ -5,6 +5,7 @@ import django.contrib.messages as messages
 
 # Create your views here.
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from baskets.models import Basket
 
 
 def login(request):
@@ -59,7 +60,8 @@ def profile(request):
             print(form.errors)
     context = {
         'title': 'Geekshop - Профайл',
-        'form': UserProfileForm(instance=request.user)  # параметр instance позволяет передать данные из пользователя
+        'form': UserProfileForm(instance=request.user),  # параметр instance позволяет передать данные из пользователя
+        'baskets': Basket.objects.filter(user=request.user)
     }
     return render(request, 'users/profile.html', context)
 

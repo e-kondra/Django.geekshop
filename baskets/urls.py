@@ -16,10 +16,11 @@ Including another URLconf
 
 from django.urls import path
 
-import baskets
+from baskets.views import basket_add, basket_remove
 
 app_name = 'baskets'
 
 urlpatterns = [
-    # path('', baskets, name='baskets'),
+    path('add/<int:product_id>/', basket_add, name='basket'),
+    path('remove/<int:basket_id>/', basket_remove, name='basket_remove'),
 ]
