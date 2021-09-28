@@ -55,15 +55,15 @@ class UserProfileForm(UserChangeForm):
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'  # изображение д.быть другого класса
 
     # валидация поля
-    # def clean_image(self):
-    #     data = self.cleaned_data['image']
-    #     if data.size > 1024000:
-    #         raise forms.ValidationError('Размер изображения не должен превышать 1024')
-    #     return data
-
-    def clean_last_name(self):
-        data = self.cleaned_data['last_name']
-        if not any(c.isupper() for c in data):
-            self.add_error('last_name', 'last_name should contain an upper character')
+    def clean_image(self):
+        data = self.cleaned_data['image']
+        if data.size > 1024000:
+            raise forms.ValidationError('Размер изображения не должен превышать 1024 КБ')
         return data
+
+    # def clean_last_name(self): Это для тренировки
+    #     data = self.cleaned_data['last_name']
+    #     if not any(c.isupper() for c in data):
+    #         self.add_error('last_name', 'last_name should contain an upper character')
+    #     return data
 

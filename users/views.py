@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
 import django.contrib.messages as messages
+# from django.contrib.messages import constants as messages
 
 # Create your views here.
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
@@ -58,7 +59,8 @@ def profile(request):
             messages.success(request, 'Данные успешно изменены!')
             return HttpResponseRedirect(reverse('users:profile'))
         else:
-            print(form.errors)
+            messages.error(request, form.errors)
+
     context = {
         'title': 'Geekshop - Профайл',
         'form': UserProfileForm(instance=request.user),  # параметр instance позволяет передать данные из пользователя
