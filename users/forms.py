@@ -38,7 +38,8 @@ class UserRegisterForm(UserCreationForm):
 
 class UserProfileForm(UserChangeForm):
 
-    image = forms.ImageField(widget=forms.FileInput, required=False) # required=False - поле может быть пустым
+    image = forms.ImageField(widget=forms.FileInput, required=False)  # required=False - поле может быть пустым
+
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'image')
@@ -51,12 +52,18 @@ class UserProfileForm(UserChangeForm):
         for field_name, field in self.fields.items():  # тут мы нужный класс подставляем всем полям
             field.widget.attrs['class'] = 'form-control py-4'
 
-        self.fields['image'].widget.attrs['class'] = 'custom-file-input' # изображение д.быть другого класса
+        self.fields['image'].widget.attrs['class'] = 'custom-file-input'  # изображение д.быть другого класса
 
     # валидация поля
-    def clean_image(self):
-        data = self.cleaned_data['image']
-        if data.size > 1024000:
-            print(data.size)
-            raise forms.ValidationError('Размер изображения не должен превышать 1024')
+    # def clean_image(self):
+    #     data = self.cleaned_data['image']
+    #     if data.size > 1024000:
+    #         raise forms.ValidationError('Размер изображения не должен превышать 1024')
+    #     return data
+
+    def clean_last_name(self):
+        data = self.cleaned_data['last_name']
+        if not any(c.isupper() for c in data):
+            self.add_error('last_name', 'last_name should contain an upper character')
         return data
+

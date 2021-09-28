@@ -52,9 +52,10 @@ def profile(request):
     if request.method == 'POST':  # пост-запрос на сохранение измененных данных
         form = UserProfileForm(data=request.POST,
                                instance=request.user,  # в параметре instance передаем какого юзера обновлять
-                               files=request.FILES) # указываем, что необходимо сохранять и файлы
+                               files=request.FILES)  # указываем, что необходимо сохранять и файлы
         if form.is_valid():
             form.save()
+            messages.success(request, 'Данные успешно изменены!')
             return HttpResponseRedirect(reverse('users:profile'))
         else:
             print(form.errors)
