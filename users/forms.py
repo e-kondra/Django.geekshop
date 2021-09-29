@@ -61,9 +61,8 @@ class UserProfileForm(UserChangeForm):
             raise forms.ValidationError('Размер изображения не должен превышать 1024 КБ')
         return data
 
-    # def clean_last_name(self): Это для тренировки
+    # def clean_last_name(self):# Это для тренировки и теста
     #     data = self.cleaned_data['last_name']
     #     if not any(c.isupper() for c in data):
     #         self.add_error('last_name', 'last_name should contain an upper character')
     #     return data
-
