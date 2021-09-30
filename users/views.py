@@ -3,7 +3,6 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
 import django.contrib.messages as messages
-# from django.contrib.messages import constants as messages
 
 # Create your views here.
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
@@ -73,10 +72,8 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
-
+@login_required
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
-def total_quantity(request):
-    pass
