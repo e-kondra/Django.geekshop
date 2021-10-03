@@ -57,7 +57,7 @@ class UserProfileForm(UserChangeForm):
     # валидация поля
     def clean_image(self):
         data = self.cleaned_data['image']
-        if data.size > 1024000:
+        if data.size > 1024*1024:
             raise forms.ValidationError('Размер изображения не должен превышать 1024 КБ')
         return data
 
