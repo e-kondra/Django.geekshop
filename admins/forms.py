@@ -1,5 +1,6 @@
 from django import forms
 
+from mainapp.models import ProductCategory
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
 
@@ -31,3 +32,25 @@ class UserAdminProfileForm(UserProfileForm):
         self.fields['username'].widget.attrs['readonly'] = False
         self.fields['email'].widget.attrs['readonly'] = False
 
+class CategoryAdminCreateForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ('name', 'description',)
+
+    def __init__(self,*args, **kwargs):
+        super(CategoryAdminCreateForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['placeholder'] = 'Введите наименование категории'
+        self.fields['description'].widget.attrs['placeholder'] = 'Введите описание категории'
+        for field_name, field in self.fields.items():  # подставляем всем полям нужный класс
+            field.widget.attrs['class'] = 'form-control py-4'
+
+
+class CategoryAdminUpdateForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ('name', 'description',)
+
+    def __init__(self,*args, **kwargs):
+        super(CategoryAdminUpdateForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():  # подставляем всем полям нужный класс
+            field.widget.attrs['class'] = 'form-control py-4'
