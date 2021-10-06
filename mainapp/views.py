@@ -17,12 +17,15 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request):
+def products(request, category_id=None):
+    #category_id - для фильтра передаем
     # file_path = os.path.join(MODULE_DIR, 'fixtures/db.json')
+    products = Product.objects.filter(category_id=category_id) if category_id != None else Product.objects.all()
+
     context = {
         'title': 'products',
         'date': datetime.date.today(),
-        'products': Product.objects.all(),
+        'products': products,
         'categories': ProductCategory.objects.all(),
         # загрузка из json
         # 'products': json.load(open(file_path, encoding="utf-8")),

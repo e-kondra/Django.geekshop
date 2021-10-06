@@ -59,6 +59,8 @@ class CategoryAdminUpdateForm(forms.ModelForm):
 
 class ProductAdminRegisterForm(forms.ModelForm):
     image = forms.ImageField(widget=forms.FileInput, required=False)
+    category = forms.ModelChoiceField(widget=forms.Select(), queryset=ProductCategory.objects.all())
+
     class Meta:
         model = Product
         fields = ('name', 'image', 'description', 'price', 'quantity', 'category')
@@ -68,14 +70,16 @@ class ProductAdminRegisterForm(forms.ModelForm):
         self.fields['category'].widget.attrs['select'] = ProductCategory.objects.all()
         for field_name, field in self.fields.items():  # подставляем всем полям нужный класс
             if field_name == 'image':
-                field.widget.attrs['class'] = 'form-control'
+                field.widget.attrs['class'] = 'custom-file-input'
+            elif field_name == 'category':
+                field.widget.attrs['class'] = 'custom-select'
             else:
                 field.widget.attrs['class'] = 'form-control py-4'
 
 
 class ProductAdminUpdateForm(forms.ModelForm):
     image = forms.ImageField(widget=forms.FileInput, required=False)
-    category = forms.Select()
+    category = forms.ModelChoiceField(widget=forms.Select(), queryset=ProductCategory.objects.all())
 
     class Meta:
         model = Product
@@ -83,8 +87,11 @@ class ProductAdminUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProductAdminUpdateForm, self).__init__(*args, **kwargs)
+
         for field_name, field in self.fields.items():
             if field_name == 'image':  # переопределяем так как классы съехали
-                field.widget.attrs['class'] = 'form-control'
+                field.widget.attrs['class'] = 'custom-file-input'
+            elif field_name == 'category':
+                field.widget.attrs['class'] = 'custom-select'
             else:
                 field.widget.attrs['class'] = 'form-control py-4'
