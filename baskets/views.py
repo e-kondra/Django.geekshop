@@ -8,16 +8,17 @@ from baskets.models import Basket
 
 @login_required
 def basket_add(request, product_id):
-    user_selected = request.user
-    product = Product.objects.get(id=product_id)
-    baskets = Basket.objects.filter(user=user_selected, product=product)
-    if not baskets.exists():
-        Basket.objects.create(user=user_selected, product=product, quantity=1)
-    else:
-        basket = baskets.first()
-        basket.quantity += 1
-        basket.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) # переход туда где мы уже находимся
+    if request.is_ajax():
+        user_selected = request.user
+        product = Product.objects.get(id=product_id)
+        baskets = Basket.objects.filter(user=user_selected, product=product)
+        if not baskets.exists():
+            Basket.objects.create(user=user_selected, product=product, quantity=1)
+        else:
+            basket = baskets.first()
+            basket.quantity += 1
+            basket.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER')) # переход туда где мы уже находимся
 
 @login_required
 def basket_remove(request, basket_id):
