@@ -3,6 +3,7 @@ from django.shortcuts import render
 import datetime
 import os, json
 
+from django.urls import reverse_lazy
 from django.views.generic import ListView
 
 from .models import Product,ProductCategory
@@ -23,10 +24,11 @@ def index(request):
 class ProductsListView(ListView):
     model = Product
     template_name = 'mainapp/products.html'
+    success_url = reverse_lazy('mainapp:products')
 
     def get_queryset(self):
         category_id = self.kwargs.get('pk', None)
-        self.products= Product.objects.filter(category_id=category_id) if category_id != None else Product.objects.all()
+        self.products = Product.objects.filter(category_id=category_id) if category_id != None else Product.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductsListView, self).get_context_data(**kwargs)

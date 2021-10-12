@@ -141,7 +141,9 @@ class ProductUpdateView(UpdateView):
         context['title'] = 'Админка | Изменение продукта'
         return context
 
+
 class ProductDeleteView(DeleteView):
     model = Product
     template_name = 'admins/admin-product-update-delete.html'
     success_url = reverse_lazy('admins:admins_products')
+
