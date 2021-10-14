@@ -6,6 +6,7 @@ import os, json
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 
+from geekshop.mixin import BaseClassContextMixin
 from .models import Product,ProductCategory
 
 
@@ -21,9 +22,10 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-class ProductsListView(ListView):
+class ProductsListView(ListView, BaseClassContextMixin):
     model = Product
     template_name = 'mainapp/products.html'
+    title = 'Каталог'
     success_url = reverse_lazy('mainapp:products')
 
     def get_queryset(self):
@@ -32,7 +34,6 @@ class ProductsListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductsListView, self).get_context_data(**kwargs)
-        context['title'] = 'Каталог'
         context['date'] = datetime.date.today()
         context['categories'] = ProductCategory.objects.all()
 
