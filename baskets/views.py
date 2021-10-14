@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.template.loader import render_to_string
@@ -15,7 +16,7 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
     model = Basket
     success_url = reverse_lazy('users:profile')
     context_object_name = 'baskets'
-    fields = ['products']
+    fields = ['product']
 
     def post(self, request, *args, **kwargs):
         product_id = self.kwargs.get('pk', None)
@@ -28,8 +29,16 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
             basket.quantity += 1
             basket.save()
 
+        paginator = Paginator(Product.objects.all(), per_page=3)
+        try:
+            products_paginator = paginator.page(1)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
+
         context = {
-            'products': Product.objects.filter()
+            'products': products_paginator
         }
         result = render_to_string('mainapp/products_list.html', context, request=request)
 
@@ -84,19 +93,12 @@ class BasketUpdateView(UpdateView, LoginsRequiredMixin):
     model = Basket
     template_name = 'users/profile.html'
     success_url = reverse_lazy('users:profile')
-    context_object_name = 'baskets'
-    fields = ['products']
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(BasketUpdateView, self).get_context_data(**kwargs)
-        context['baskets'] = Basket.objects.filter(user=self.request.user)
-        return context
+    fields = ['product']
 
     def get(self, request, *args, **kwargs):
         super(BasketUpdateView, self).get(request, *args,**kwargs)
-        basket_id = self.kwargs.get('pk', None)
-        quantity = self.kwargs.get('quantity', None)
-
+        basket_id = kwargs.get('pk', None)
+        quantity = kwargs.get('quantity', None)
         if request.is_ajax():
             basket = Basket.objects.get(id=basket_id)
             if quantity > 0:
@@ -104,10 +106,11 @@ class BasketUpdateView(UpdateView, LoginsRequiredMixin):
                 basket.save()
             else:
                 basket.delete()
-            context = {
-                'baskets': Basket.objects.filter(user=self.request.user)
-            }
-            result = render_to_string('baskets/baskets.html', context, request=request)
 
-            return JsonResponse({'result': result})
-        return redirect(self.success_url)
+        context = {
+            'baskets': Basket.objects.filter(user=request.user)
+        }
+        result = render_to_string('baskets/baskets.html', context, request=request)
+
+        return JsonResponse({'result': result})
+
