@@ -18,7 +18,7 @@ window.onload = function (){
             let t_href = e.target;
 
             console.log(t_href.name);
-            console.log(t_href.value);
+            // console.log(t_href.value);
             let csrf = $('meta[name="csrf-token"]').attr('content');
             // let page_id = t_href.value;
             $.ajax({

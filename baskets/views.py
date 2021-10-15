@@ -19,7 +19,8 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
     fields = ['product']
 
     def post(self, request, *args, **kwargs):
-        product_id = self.kwargs.get('pk', None)
+        product_id = kwargs.get('pk', None)
+        # page_id = kwargs.get('page_id',None)
         product = Product.objects.get(id=product_id)
         baskets = Basket.objects.filter(user=request.user, product=product)
         if not baskets.exists():
