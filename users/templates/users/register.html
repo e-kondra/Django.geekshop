@@ -1,15 +1,15 @@
 {% extends 'users/base.html' %}
 {% block content %}
     <div class="col-lg-7">
-{#        {% if form.errors %}#}
+        {#        {% if form.errors %}#}
         {% if messages %}
 
             <div class="alert alert-warning alert-dismissible fade show" role="alert"
                  style="margin-top: 50px;">
-{#                выводим ошибки#}
+                {#                выводим ошибки#}
                 {% for message in messages %}
                     {{ message }}
-{#                {{ form.errors|escape}}#}
+                    {#                {{ form.errors|escape}}#}
                 {% endfor %}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -32,7 +32,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="small mb-1" for="{{ form.last_name.id_for_label }}">Фамилия</label>
-                                {{ form.last_name}}
+                                {{ form.last_name }}
                             </div>
                         </div>
                     </div>
@@ -65,11 +65,16 @@
                     <div class="form-group mt-4 mb-0">
                         <input class="btn btn-primary btn-block" type="submit" value="Создать аккаунт">
                     </div>
-                </form>
-            </div>
-            <div class="card-footer text-center">
-                <div class="small"><a href="{% url 'users:login' %}">Уже есть аккаунт? Авторизоваться</a></div>
-            </div>
+                    <div class="list-group-horizontal card-footer text-center small">
+                        <a href="{% url 'social:begin' 'vk-oauth2' %}?next= /">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                    </div>
+            </form>
         </div>
+        <div class="card-footer text-center">
+            <div class="small"><a href="{% url 'users:login' %}">Уже есть аккаунт? Авторизоваться</a></div>
+        </div>
+    </div>
     </div>
 {% endblock %}
