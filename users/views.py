@@ -13,9 +13,9 @@ FormView, UpdateView,
 
 # Create your views here.
 from geekshop.mixin import BaseClassContextMixin, LoginsRequiredMixin
-from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 from baskets.models import Basket
-from users.models import User
+from users.models import User, UserProfile
 
 
 class UserLoginView(LoginView, BaseClassContextMixin):
@@ -95,20 +95,22 @@ class UserProfileView(UpdateView, BaseClassContextMixin):
     def get_object(self, queryset=None):
         return get_object_or_404(User, pk=self.request.user.pk)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(UserProfileView, self).get_context_data(**kwargs)
-    #     context['baskets'] = Basket.objects.filter(user=self.request.user)
-    #     return context
-    # Это можем залочить так как в контекстном процессоре происходит определение списка
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileView, self).get_context_data(**kwargs)
+        context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
+
+    #    context['baskets'] = Basket.objects.filter(user=self.request.user)  # Это можем залочить так как в контекстном процессоре происходит определение списка
+        return context
 
     @method_decorator(user_passes_test(lambda u: u.is_authenticated))
     def dispatch(self, request, *args, **kwargs):
         return super(UserProfileView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(data=request.POST, files=request.FILES, instance=self.get_object())
-        if form.is_valid():
-            form.save()
+        form = self.form_class(data=request.POST, files=request.FILES, instance=request.user)
+        userprofile = UserProfileEditForm(data=request.POST, instance=request.user.userprofile) # instance-объект, который мы обновляем
+        if form.is_valid() and userprofile.is_valid():
+            form.save() # в этот момент отработают сигналы save_user_profile/create_user_profile в models
             return redirect(self.success_url)
         return redirect(self.success_url)
 

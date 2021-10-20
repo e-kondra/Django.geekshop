@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from django import forms
 
 
-from users.models import User
+from users.models import User, UserProfile
 
 
 class UserLoginForm(AuthenticationForm):
@@ -54,7 +54,7 @@ class UserRegisterForm(UserCreationForm):
             self.add_error('email','Пользователь с таким email уже зарегистрирован' )
         return data
 
-        
+
         
 class UserProfileForm(UserChangeForm):
 
@@ -75,14 +75,29 @@ class UserProfileForm(UserChangeForm):
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'  # изображение д.быть другого класса
 
     # валидация поля
-    def clean_image(self):
-        data = self.cleaned_data['image']
-        if data.size > 1024*1024:
-            raise forms.ValidationError('Размер изображения не должен превышать 1024 КБ')
-        return data
+    # def clean_image(self):
+    #     data = self.cleaned_data['image']
+    #     if data.size > 1024*1024:
+    #         raise forms.ValidationError('Размер изображения не должен превышать 1024 КБ')
+    #     return data
 
     # def clean_last_name(self):# Это для тренировки и теста
     #     data = self.cleaned_data['last_name']
     #     if not any(c.isupper() for c in data):
     #         self.add_error('last_name', 'last_name should contain an upper character')
     #     return data
+
+class UserProfileEditForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        fields = ('tagline', 'about', 'gender',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileEditForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():  # тут мы нужный класс подставляем всем полям
+            if field_name != 'gender':
+                field.widget.attrs['class'] = 'form-control py-4' # этот класс не работает с полем выбор
+            else:
+                field.widget.attrs['class'] = 'form-control'
