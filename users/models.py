@@ -35,7 +35,7 @@ class UserProfile(models.Model):
     gender = models.CharField(verbose_name='пол', choices=GENDER_CHOICES, blank=True, max_length=5)
 
 
-    # Это два сигнала, которые мы обрабатываем в заивисмости от того, что происходит во views в профайле (create или update)
+    # Это два сигнала, которые мы обрабатываем в зависмости от того, что происходит во views в профайле (create или update)
     @receiver(post_save, sender=User) # Этот сигнал позволит создавать информацию в модели в рез-тате создания в основной модели
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
