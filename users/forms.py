@@ -91,13 +91,13 @@ class UserProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('tagline', 'about', 'gender',)
+        fields = ('tagline', 'about', 'gender', 'lang')
 
     def __init__(self, *args, **kwargs):
         super(UserProfileEditForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():  # тут мы нужный класс подставляем всем полям
-            if field_name != 'gender':
-                field.widget.attrs['class'] = 'form-control py-4' # этот класс не работает с полем выбор
-            else:
+            if field_name == 'gender' or field_name == 'lang':
                 field.widget.attrs['class'] = 'form-control'
+            else:
+                field.widget.attrs['class'] = 'form-control py-4'  # этот класс не работает с полем выбор

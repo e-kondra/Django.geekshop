@@ -163,7 +163,7 @@ def verify(request, email, activation_key):
             user.activation_key_created = None
             user.is_active = True
             user.save()
-            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend') # авторизуем юзера
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend') # авторизуем юзера, указываем backend, так как у нас их два, чтобы регистрация руками была через этот
         return render(request, 'users/verification.html') # перенаправляем на страницу верификации, там ему скажут успешно или нет
     except Exception as e:
         return HttpResponseRedirect(reverse('index'))

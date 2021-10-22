@@ -28,11 +28,17 @@ class UserProfile(models.Model):
     MALE = 'M'
     FEMALE = 'W'
     GENDER_CHOICES = ((MALE, 'M'),(FEMALE,'Ж'))
+    RU = '0'
+    UK = '1'
+    BE = '2'
+    EN = '3'
+    LANGUAGE_CHOICES = ((RU, 'Русский'),(UK, 'Українська'), (BE, 'Беларуская'), (EN, 'English'))
 
     user = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
     tagline = models.CharField(verbose_name='тэги', max_length=128, blank=True)
     about = models.TextField(verbose_name='о себе', blank=True, null=True)
     gender = models.CharField(verbose_name='пол', choices=GENDER_CHOICES, blank=True, max_length=5)
+    lang = models.CharField(verbose_name='язык', choices=LANGUAGE_CHOICES, blank=True, max_length=10)
 
 
     # Это два сигнала, которые мы обрабатываем в зависмости от того, что происходит во views в профайле (create или update)
