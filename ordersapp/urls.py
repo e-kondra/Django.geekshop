@@ -13,25 +13,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+
+
+from .views import OrderListView, OrderCreateView,OrderDeleteView, OrderUpdateView, OrderDetailView, order_forming_complete
 
 
 from mainapp.views import index
 
+app_name = 'ordersapp'
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', index, name='index'),
-    path('products/', include('mainapp.urls', namespace='products')),
-    path('users/', include('users.urls', namespace='users')),
-    path('baskets/', include('baskets.urls', namespace='baskets')),
-    path('admins/', include('admins.urls', namespace='admins')),
-    path('', include('social_django.urls', namespace='social')),
-    path('orders/', include('ordersapp.urls', namespace='orders')),
+    path('', OrderListView.as_view(), name='list'), # по ссылке Order мы попадем в OrderList
+    path('create/',OrderCreateView.as_view(),name='create'),
+    path('update/<int:pk>/',OrderUpdateView.as_view(),name='update'),
+    path('delete/<int:pk>/',OrderDeleteView.as_view(),name='delete'),
+    path('read/<int:pk>/',OrderDetailView.as_view(),name='detail'),
+    path('forming_complete/',order_forming_complete,name='forming_complete'),
 
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
