@@ -26,7 +26,8 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     update = models.DateTimeField(verbose_name='обновлен', auto_now=True)
-    status = models.CharField(choise='ORDER_STATUS_CHOICES',verbose_name='статус', max_length=3, default='FORMING')
+    status = models.CharField(choices=ORDER_STATUS_CHOICES,verbose_name='статус', max_length=3, default='FORMING')
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f'Текущий заказ {self.pk}'
