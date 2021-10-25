@@ -28,7 +28,7 @@
                         <td class="td1 orders_list">{{ item.pk }}</td>
                         <td>{{ item.created|date:"Y-m-d H:i:s" }}</td>
                         <td>{{ item.updated|date:"Y-m-d H:i:s" }}</td>
-                        <td>{{ item.get_status_display }}</td>
+                        <td>{{ item.get_status_display}}</td>
                         <td>
                             <a href="{% url 'orders:read' item.pk %}">
                                 посмотреть
