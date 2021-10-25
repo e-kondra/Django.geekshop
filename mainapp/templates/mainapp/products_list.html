@@ -1,0 +1,29 @@
+<div class="products_list">
+    <div class="row">
+        {% for prod in products %}
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <a href="#">
+                        <img class="card-img-top" src="{{ prod.image.url }}" alt="">
+                    </a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#">{{ prod.name }}</a>
+                        </h4>
+                        <h5>{{ prod.price }} руб.</h5>
+                        <p class="card-text">{{ prod.description }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="products_add">
+                            <button type="button" name="{{ prod.id }}" class="btn btn-outline-success">Отправить в
+                                корзину
+                                {#                         <a href="{% url 'baskets:basket' prod.id %}" class="btn btn-outline-success">Отправить в корзину</a>#}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
