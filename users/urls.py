@@ -25,5 +25,5 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='profile'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
 
-    path('verify/<str:email>/<str:activation_key>/', verify, name='verify')
+    path('verify/<str:email>/<str:activation_key>/', UserRegisterView.verify, name='verify')
 ]

@@ -58,7 +58,7 @@ class UserRegisterView(FormView, BaseClassContextMixin):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             user = form.save()
-            if send_verify_link(user):
+            if self.send_verify_link(user):
                 messages.success(request, 'Вы успешно зарегистрировались! Необходимо активировать профиль: на указанный mail Вам была отправлена ссылка для активации.')
                 return redirect(self.success_url)
         else:
@@ -66,6 +66,28 @@ class UserRegisterView(FormView, BaseClassContextMixin):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         #return redirect(self.success_url)
 
+    @staticmethod
+    def send_verify_link(user):
+        verify_link = reverse('users:verify', args=[user.email, user.activation_key])  # сделали ссылку
+        subject = f'Для активации учетной записи {user.username} пройдите по ссылке'
+        message = f'Для подтверждения учетной записи {user.username} на портале \n {settings.DOMAIN_NAME}{verify_link}'
+        return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+    @staticmethod
+    def verify(request, email, activation_key):
+        try:
+            user = User.objects.get(email=email)
+            if user and user.activation_key == activation_key and not user.is_activation_key_expired():
+                user.activation_key = ''  # сбрасываем ключ активации и дату/время, они больше не нужен, чтоб память не занимали
+                user.activation_key_created = None
+                user.is_active = True
+                user.save()
+                auth.login(request, user,
+                           backend='django.contrib.auth.backends.ModelBackend')  # авторизуем юзера, указываем backend, так как у нас их два, чтобы регистрация руками была через этот
+            return render(request,
+                          'users/verification.html')  # перенаправляем на страницу верификации, там ему скажут успешно или нет
+        except Exception as e:
+            return HttpResponseRedirect(reverse('index'))
 
 # def register(request):
 #     if request.method == 'POST':
@@ -149,21 +171,3 @@ class UserLogoutView(LogoutView):
     template_name = 'mainapp/index.html'
 
 
-def send_verify_link(user):
-    verify_link = reverse('users:verify',args=[user.email, user.activation_key]) # сделали ссылку
-    subject = f'Для активации учетной записи {user.username} пройдите по ссылке'
-    message = f'Для подтверждения учетной записи {user.username} на портале \n {settings.DOMAIN_NAME}{verify_link}'
-    return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
-
-def verify(request, email, activation_key):
-    try:
-        user = User.objects.get(email=email)
-        if user and user.activation_key == activation_key and not user.is_activation_key_expired():
-            user.activation_key = ''  # сбрасываем ключ активации и дату/время, они больше не нужен, чтоб память не занимали
-            user.activation_key_created = None
-            user.is_active = True
-            user.save()
-            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend') # авторизуем юзера, указываем backend, так как у нас их два, чтобы регистрация руками была через этот
-        return render(request, 'users/verification.html') # перенаправляем на страницу верификации, там ему скажут успешно или нет
-    except Exception as e:
-        return HttpResponseRedirect(reverse('index'))
