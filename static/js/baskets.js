@@ -1,4 +1,4 @@
-window.onload = function (){
+window.addEventListener("load", function(evt){
     $('.basket_list').on('click','input[type="number"]', function(){ //basket_list-это класс в нашем baskets.html
         let t_href = event.target;
         // console.log(t_href.name);
@@ -37,4 +37,4 @@ window.onload = function (){
             e.preventDefault();
         });
     });
-}
+});
