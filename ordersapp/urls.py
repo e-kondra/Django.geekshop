@@ -17,8 +17,8 @@ Including another URLconf
 from django.urls import path, include
 
 
-from .views import OrderListView, OrderCreateView,OrderDeleteView, OrderUpdateView, OrderDetailView, order_forming_complete
-
+from .views import OrderListView, OrderCreateView, OrderDeleteView, OrderUpdateView, OrderDetailView, \
+    order_forming_complete, payment_result, get_product_price
 
 from mainapp.views import index
 
@@ -31,5 +31,8 @@ urlpatterns = [
     path('delete/<int:pk>/',OrderDeleteView.as_view(),name='delete'),
     path('read/<int:pk>/',OrderDetailView.as_view(),name='read'),
     path('forming_complete/<int:pk>/',order_forming_complete,name='forming_complete'),
+
+    path('product/<int:pk>/price/', get_product_price, name='product_price'),
+    path('payment/result/',payment_result,name='payment_result'),
 
 ]
