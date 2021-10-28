@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-jp63w$@98or@_3vov-kq6%q3vgv*$gbz*x*oq6l($4#y+w1l9v
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -85,10 +85,20 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# Используем в учебных целях
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# Используем для публ
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'geekshop',
+        'USER': 'postgres',
     }
 }
 
@@ -144,12 +154,20 @@ LOGIN_URL = '/users/login/'
 LOGIN_ERROR_URL = '/'
 
 
+# DOMAIN_NAME = 'http:/localhost:8000'
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
+
 DOMAIN_NAME = 'http:/localhost:8000'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
+EMAIL_HOST_USER = 'django'
+EMAIL_HOST_PASSWORD = 'geekshop'
+EMAIL_USE_SSL = 'False'
+
 
 # вариант #1
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
