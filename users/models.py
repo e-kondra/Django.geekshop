@@ -4,7 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from win32timezone import now
+#from win32timezone import now
+from datetime import datetime
 
 NULL_INSTALL = {'null':True, 'blank':True}
 
@@ -18,7 +19,7 @@ class User(AbstractUser):
     activation_key_created = models.DateTimeField(auto_now_add=True, **NULL_INSTALL)
 
     def is_activation_key_expired(self):
-        if now() <= self.activation_key_created + timedelta(hours=48):
+        if datetime.now() <= self.activation_key_created + timedelta(hours=48):
             return False
         return True
 
@@ -39,6 +40,7 @@ class UserProfile(models.Model):
     about = models.TextField(verbose_name='о себе', blank=True, null=True)
     gender = models.CharField(verbose_name='пол', choices=GENDER_CHOICES, blank=True, max_length=5)
     lang = models.CharField(verbose_name='язык', choices=LANGUAGE_CHOICES, blank=True, max_length=10)
+    photo = models.ImageField(blank=True)
 
 
     # Это два сигнала, которые мы обрабатываем в зависмости от того, что происходит во views в профайле (create или update)

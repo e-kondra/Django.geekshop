@@ -15,7 +15,7 @@ Including another URLconf
 """
 
 from django.urls import path
-from .views import UserLoginView, UserLogoutView, UserRegisterView, UserProfileView, verify
+from .views import UserLoginView, UserLogoutView, UserRegisterView, UserProfileView
 
 app_name = 'users'
 
