@@ -22,7 +22,7 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
         product_id = kwargs.get('pk', None)
         # page_id = kwargs.get('page_id',None)
         product = Product.objects.get(id=product_id)
-        baskets = Basket.objects.filter(user=request.user, product=product)
+        baskets = Basket.objects.filter(user=request.user, product=product).select_related()
         if not baskets.exists():
             Basket.objects.create(user=request.user, product=product, quantity=1)
         else:
@@ -109,7 +109,7 @@ class BasketUpdateView(UpdateView, LoginsRequiredMixin):
                 basket.delete()
 
         context = {
-            'baskets': Basket.objects.filter(user=request.user)
+            'baskets': Basket.objects.filter(user=request.user).select_related()
         }
         result = render_to_string('baskets/baskets.html', context, request=request)
 
