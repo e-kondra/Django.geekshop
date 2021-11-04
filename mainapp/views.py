@@ -5,6 +5,8 @@ import os, json
 
 from django.urls import reverse_lazy
 from django.views.generic import ListView
+from django.conf import settings
+from django.core.cache import cache
 
 from geekshop.mixin import BaseClassContextMixin
 from .models import Product,ProductCategory
@@ -21,6 +23,18 @@ def index(request):
     }
     return render(request, 'mainapp/index.html', context)
 
+#  пишем категории в кеш
+def get_link_category():
+    if settings.LOW_CACHE:
+        key = 'links_category'
+        link_category = cache.get(key)
+        if link_category is None:
+            link_category = ProductCategory.objects.all()
+            cache.set(key, link_category)
+        return link_category
+    else:
+        return ProductCategory.objects.all()
+
 
 class ProductsListView(ListView, BaseClassContextMixin):
     model = Product
@@ -35,7 +49,7 @@ class ProductsListView(ListView, BaseClassContextMixin):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductsListView, self).get_context_data(**kwargs)
         context['date'] = datetime.date.today()
-        context['categories'] = ProductCategory.objects.all()
+        context['categories'] = get_link_category()
 
         page_id = self.kwargs.get('page_id', None)
         paginator = Paginator(self.products, per_page=3)
