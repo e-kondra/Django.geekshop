@@ -8,3 +8,4 @@ def basket(request):
         'baskets':baskets_list
     }
 
+
