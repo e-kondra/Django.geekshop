@@ -1,10 +1,10 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import datetime
 import os, json
 
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.conf import settings
 from django.core.cache import cache
 
@@ -35,6 +35,28 @@ def get_link_category():
     else:
         return ProductCategory.objects.all()
 
+def get_link_product(category_id):
+    if settings.LOW_CACHE:
+        key = 'links_product'
+        link_product = cache.get(key)
+        if link_product is None:
+            link_product = Product.objects.filter(category_id=category_id).select_related('category') if category_id != None else link_product = Product.objects.all().select_related('category')
+            cache.set(key, link_product)
+        return link_product
+    else:
+        return Product.objects.filter(category_id=category_id).select_related('category') if category_id != None else Product.objects.all().select_related()
+
+def get_product(pk):
+    if settings.LOW_CACHE:
+        key = f'product{pk}'
+        product = cache.get(key)
+        if product is None:
+            product = get_object_or_404(Product,pk=pk)
+            cache.set(key, product)
+        return product
+    else:
+        return get_object_or_404(Product,pk=pk)
+
 
 class ProductsListView(ListView, BaseClassContextMixin):
     model = Product
@@ -44,7 +66,8 @@ class ProductsListView(ListView, BaseClassContextMixin):
 
     def get_queryset(self):
         category_id = self.kwargs.get('pk', None)
-        self.products = Product.objects.filter(category_id=category_id).select_related('category') if category_id != None else Product.objects.all().select_related('category')
+        self.products = get_link_product(category_id) # кешируем
+        # self.products = Product.objects.filter(category_id=category_id).select_related('category') if category_id != None else Product.objects.all().select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductsListView, self).get_context_data(**kwargs)
@@ -93,3 +116,19 @@ class ProductsListView(ListView, BaseClassContextMixin):
 #         # ],
 #
 #     return render(request, 'mainapp/products.html', context)
+class ProductDetail(DetailView):
+    """
+    Контроллер вывода информации о продукте
+    """
+    model = Product
+    template_name = 'mainapp/product_detail.html'
+    context_object_name = 'product'
+
+
+    def get_context_data(self, category_id=None, *args, **kwargs):
+        """Добавляем список категорий для вывода сайдбара с категориями на странице каталога"""
+        context = super().get_context_data()
+
+        context['product'] = get_product(self.kwargs.get('pk'))
+        context['categories'] = ProductCategory.objects.all()
+        return context
