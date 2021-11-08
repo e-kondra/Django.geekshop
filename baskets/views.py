@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.template.loader import render_to_string
@@ -27,7 +28,8 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
             Basket.objects.create(user=request.user, product=product, quantity=1)
         else:
             basket = baskets.first()
-            basket.quantity += 1
+            #basket.quantity += 1
+            basket.quantity = F('quantity') + 1
             basket.save()
 
         paginator = Paginator(Product.objects.all(), per_page=3)

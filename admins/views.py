@@ -147,4 +147,9 @@ class ProductDeleteView(DeleteView):
     model = Product
     template_name = 'admins/admin-product-update-delete.html'
     success_url = reverse_lazy('admins:admins_products')
-
+    #
+    # def delete(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     self.object.is_active = False
+    #     self.object.save()
+    #     return HttpResponseRedirect(self.get_success_url())

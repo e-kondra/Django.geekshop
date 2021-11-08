@@ -16,17 +16,23 @@
                                 <thead>
                                 <tr>
                                     <th>Наименование</th>
+                                    <th>Описание</th>
                                     <th>Стоимость</th>
                                     <th>Количество</th>
                                     <th>Категория</th>
+                                    <th>Активный</th>
+{#                                    <th>Удалить</th>#}
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th>Наименование</th>
+                                    <th>Описание</th>
                                     <th>Стоимость</th>
                                     <th>Количество</th>
                                     <th>Категория</th>
+                                    <th>Активный</th>
+{#                                    <th>Удалить</th>#}
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -34,9 +40,21 @@
                                     <tr>
                                         <td><a href="{% url 'admins:admins_product_update' product.id %}"
                                                style="color: dodgerblue">{{ product.name }}</a></td>
+                                        <td>{{ product.description }}</td>
                                         <td>{{ product.price }}</td>
                                         <td>{{ product.quantity }}</td>
                                         <td>{{ product.category }}</td>
+                                        <td class="text-center">
+                                            {% if product.is_active %}
+                                                <i class="fas fa-check-circle"></i>
+                                            {% else %}
+                                                <i class="fas fa-times-circle"></i>
+                                            {% endif %}
+                                        </td>
+{#                                        <td><a href="{% url 'admins:admins_product_delete' product.id %}">#}
+{#                                            <i class="fas fa-trash"></i>#}
+{#                                            </a>#}
+{#                                        </td>#}
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -45,7 +63,7 @@
                     </div>
                     <div class="card-footer">
                         <a href="{% url 'admins:admins_product_create' %}">
-                            <button class="btn btn-success">Создать продукт</button>
+                            <button class="btn btn-success">Добавить новый продукт</button>
                         </a>
                     </div>
                 </div>

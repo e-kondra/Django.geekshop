@@ -36,25 +36,32 @@ class UserAdminProfileForm(UserProfileForm):
 class CategoryAdminCreateForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
-        fields = ('name', 'description',)
+        fields = ('name', 'description', 'is_active')
 
     def __init__(self, *args, **kwargs):
         super(CategoryAdminCreateForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['placeholder'] = 'Введите наименование категории'
         self.fields['description'].widget.attrs['placeholder'] = 'Введите описание категории'
         for field_name, field in self.fields.items():  # подставляем всем полям нужный класс
-            field.widget.attrs['class'] = 'form-control py-4'
+            if field_name == 'is_active':
+                field.widget.attrs['class'] = 'form-check-inline'
+            else:
+                field.widget.attrs['class'] = 'form-control py-4'
 
 
 class CategoryAdminUpdateForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
-        fields = ('name', 'description',)
+        fields = ('name', 'description', 'is_active')
 
     def __init__(self, *args, **kwargs):
         super(CategoryAdminUpdateForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():  # подставляем всем полям нужный класс
-            field.widget.attrs['class'] = 'form-control py-4'
+            if field_name == 'is_active':
+                field.widget.attrs['class'] = 'form-check-inline'
+            else:
+                field.widget.attrs['class'] = 'form-control py-4'
+
 
 
 class ProductAdminRegisterForm(forms.ModelForm):
@@ -63,7 +70,7 @@ class ProductAdminRegisterForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('name', 'image', 'description', 'price', 'quantity', 'category')
+        fields = ('name', 'image', 'description', 'price', 'quantity', 'category','is_active')
 
     def __init__(self, *args, **kwargs):
         super(ProductAdminRegisterForm, self).__init__(*args, **kwargs)
@@ -73,6 +80,8 @@ class ProductAdminRegisterForm(forms.ModelForm):
                 field.widget.attrs['class'] = 'custom-file-input'
             elif field_name == 'category':
                 field.widget.attrs['class'] = 'custom-select'
+            elif field_name == 'is_active':
+                field.widget.attrs['class'] = 'form-check-inline'
             else:
                 field.widget.attrs['class'] = 'form-control py-4'
 
@@ -83,7 +92,7 @@ class ProductAdminUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('name', 'image', 'description', 'price', 'quantity', 'category')
+        fields = ('name', 'image', 'description', 'price', 'quantity', 'category', 'is_active')
 
     def __init__(self, *args, **kwargs):
         super(ProductAdminUpdateForm, self).__init__(*args, **kwargs)
@@ -93,5 +102,7 @@ class ProductAdminUpdateForm(forms.ModelForm):
                 field.widget.attrs['class'] = 'custom-file-input'
             elif field_name == 'category':
                 field.widget.attrs['class'] = 'custom-select'
+            elif field_name == 'is_active':
+                field.widget.attrs['class'] = 'form-check-inline'
             else:
                 field.widget.attrs['class'] = 'form-control py-4'
