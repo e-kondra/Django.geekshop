@@ -1,9 +1,12 @@
+from django.db.models import F
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.db import connection
 
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryAdminCreateForm, CategoryAdminUpdateForm, \
     ProductAdminRegisterForm, ProductAdminUpdateForm
@@ -15,6 +18,10 @@ from users.models import User
 def index(request):
     return render(request, 'admins/admin.html')
 
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}:')
+    [print(query['sql']) for query in update_queries]
 
 class UserListView(ListView, CustomDispatchMixin):
     model = User
@@ -102,10 +109,26 @@ class CategoryUpdateView(UpdateView):
         context['title'] = 'Админка | Изменение категории'
         return context
 
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                print(f'применяется скидка {discount} % к товарам категории {self.object.name}')
+                self.object.product_set.update(price=F('price')*(1-discount/100))
+                db_profile_by_type(self.__class__,'UPDATE',connection.queries)
+        return HttpResponseRedirect(self.get_success_url())
+
 class CategoryDeleteView(DeleteView):
     model = ProductCategory
     template_name = 'admins/admin-category-update-delete.html'
     success_url = reverse_lazy('admins:admins_categories')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.product_set.update(is_active=False) # изменяем все продукты с помощью product_set
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ProductListView(ListView):
@@ -147,9 +170,9 @@ class ProductDeleteView(DeleteView):
     model = Product
     template_name = 'admins/admin-product-update-delete.html'
     success_url = reverse_lazy('admins:admins_products')
-    #
-    # def delete(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     self.object.is_active = False
-    #     self.object.save()
-    #     return HttpResponseRedirect(self.get_success_url())
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())

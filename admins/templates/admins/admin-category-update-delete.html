@@ -23,6 +23,12 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="{{ form.discount.id_for_label }}">Скидка</label>
+                                {{ form.discount }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
                             <label class="sub mt-3" for="{{ form.is_active.id_for_label }}">Активный</label>
                             {{ form.is_active }}
                         </div>
