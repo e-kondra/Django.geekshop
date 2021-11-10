@@ -22,6 +22,13 @@ class UserLoginView(LoginView, BaseClassContextMixin):
     template_name = 'users/login.html'
     form_class = UserLoginForm
     title = 'Geekshop - Авторизация'
+    success_url = 'index'
+
+    def get(self, request, *args, **kwargs):
+        sup = super(UserLoginView, self).get(request, *args, **kwargs)
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse_lazy(self.success_url))
+        return sup
 
 
 #
@@ -64,7 +71,7 @@ class UserRegisterView(FormView, BaseClassContextMixin):
         else:
             messages.error(request, form.errors)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        #return redirect(self.success_url)
+        return redirect(self.success_url)
 
     @staticmethod
     def send_verify_link(user):
