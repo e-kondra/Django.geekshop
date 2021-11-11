@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 #     }
 # }
 
-# # Используем для публ
+# Используем для публ
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -142,7 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = (BASE_DIR / 'static',)
+# STATICFILES_DIRS = (BASE_DIR / 'static',)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -158,19 +158,19 @@ LOGIN_URL = '/users/login/'
 LOGIN_ERROR_URL = '/'
 
 
-DOMAIN_NAME = 'http:/localhost:8000'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
-
-# DOMAIN_NAME = 'http://89.108.76.79/'
+# DOMAIN_NAME = 'http:/localhost:8000'
 # EMAIL_HOST = 'localhost'
 # EMAIL_PORT = 25
-# EMAIL_HOST_USER = 'django'
-# EMAIL_HOST_PASSWORD = 'geekshop'
-# EMAIL_USE_SSL = 'False'
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
+
+DOMAIN_NAME = 'http://89.108.76.79/'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'django'
+EMAIL_HOST_PASSWORD = 'geekshop'
+EMAIL_USE_SSL = 'False'
 
 
 # вариант #1

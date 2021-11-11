@@ -4,8 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-#from win32timezone import now
-from datetime import datetime
+
+from django.utils.timezone import now
 
 NULL_INSTALL = {'null':True, 'blank':True}
 
@@ -19,7 +19,7 @@ class User(AbstractUser):
     activation_key_created = models.DateTimeField(auto_now_add=True, **NULL_INSTALL)
 
     def is_activation_key_expired(self):
-        if datetime.now() <= self.activation_key_created + timedelta(hours=48):
+        if now() <= self.activation_key_created + timedelta(hours=48):
             return False
         return True
 
