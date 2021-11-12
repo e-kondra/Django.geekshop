@@ -32,7 +32,7 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
             basket.quantity = F('quantity') + 1
             basket.save()
 
-        paginator = Paginator(Product.objects.all(), per_page=3)
+        paginator = Paginator(Product.objects.all().order_by('id'), per_page=3)
         try:
             products_paginator = paginator.page(page_id)
         except PageNotAnInteger:
