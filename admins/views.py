@@ -54,10 +54,11 @@ class UserUpdateView(UpdateView, CustomDispatchMixin):
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admins_user')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Админка | Обновление пользователя'
         return context
+
 
 class UserDeleteView(DeleteView):
     model = User

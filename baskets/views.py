@@ -21,7 +21,7 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
 
     def post(self, request, *args, **kwargs):
         product_id = kwargs.get('pk', None)
-        # page_id = kwargs.get('page_id',None)
+        page_id = kwargs.get('page_id',None)
         product = Product.objects.get(id=product_id)
         baskets = Basket.objects.filter(user=request.user, product=product).select_related()
         if not baskets.exists():
@@ -34,7 +34,7 @@ class BasketCreateView(CreateView, LoginsRequiredMixin):
 
         paginator = Paginator(Product.objects.all(), per_page=3)
         try:
-            products_paginator = paginator.page(1)
+            products_paginator = paginator.page(page_id)
         except PageNotAnInteger:
             products_paginator = paginator.page(1)
         except EmptyPage:

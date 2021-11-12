@@ -1,6 +1,6 @@
 <div class="products_list">
     <div class="row">
-        {% for prod in products %}
+        {% for prod in products%}
 
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100">
@@ -17,7 +17,8 @@
                     </div>
                     <div class="card-footer text-center">
                         <div class="products_add">
-                            <button type="button" name="{{ prod.id }}" class="btn btn-outline-success">Отправить в
+                            <button type="button" name="{{ prod.id }}" value="{{ products.number }}"
+                                    class="btn btn-outline-success">Отправить в
                                 корзину
                                 {#                         <a href="{% url 'baskets:basket' prod.id %}" class="btn btn-outline-success">Отправить в корзину</a>#}
                             </button>
@@ -26,5 +27,6 @@
                 </div>
             </div>
         {% endfor %}
+
     </div>
 </div>

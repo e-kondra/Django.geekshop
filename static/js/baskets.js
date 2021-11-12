@@ -18,20 +18,21 @@ window.addEventListener("load", function(evt){
             let t_href = e.target;
 
             console.log(t_href.name);
-            // console.log(t_href.value);
+            console.log(t_href.value);
             let csrf = $('meta[name="csrf-token"]').attr('content');
-            // let page_id = t_href.value;
+            let page_id = t_href.value;
             $.ajax({
                 type: 'POST',
                 headers: {
                     "X-CSRFToken":csrf
                 },
-                url: '/baskets/add/' + t_href.name + '/', // путь как в urls 'edit/<int:id>/<int:quantity>/' + переменные так же должны называться
-                // data: {'page_id': page_id},
-                success: function (data) {
-                    // if (data) {
-                    $('.products_list').html(data.result) // здесь возвращается текст-html с новыми(измененными) данными
-                    // }
+                url: '/baskets/add/' + t_href.name + '/' + page_id + '/', // путь как в urls + переменные так же должны называться
+                data: {'page_id': page_id},
+                success: (data) => {
+                    if (data) {
+                        $('.products_list').html(data.result); // здесь возвращается текст-html с новыми(измененными) данными
+                        console.log(data)
+                    }
                 },
             });
             e.preventDefault();

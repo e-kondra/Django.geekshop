@@ -9,8 +9,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from geekshop.mixin import BaseClassContextMixin
-from .models import Product,ProductCategory
-
+from .models import Product, ProductCategory
 
 MODULE_DIR = os.path.dirname(__file__)  # директория проекта
 
@@ -23,6 +22,7 @@ def index(request):
     }
     return render(request, 'mainapp/index.html', context)
 
+
 #  пишем категории в кеш
 def get_link_category():
     if settings.LOW_CACHE:
@@ -34,6 +34,7 @@ def get_link_category():
         return link_category
     else:
         return ProductCategory.objects.all()
+
 
 # def get_link_product(category_id):
 #     if settings.LOW_CACHE:
@@ -51,11 +52,11 @@ def get_product(pk):
         key = f'product{pk}'
         product = cache.get(key)
         if product is None:
-            product = get_object_or_404(Product,pk=pk)
+            product = get_object_or_404(Product, pk=pk)
             cache.set(key, product)
         return product
     else:
-        return get_object_or_404(Product,pk=pk)
+        return get_object_or_404(Product, pk=pk)
 
 
 class ProductsListView(ListView, BaseClassContextMixin):
@@ -67,7 +68,8 @@ class ProductsListView(ListView, BaseClassContextMixin):
     def get_queryset(self):
         category_id = self.kwargs.get('pk', None)
         # self.products = get_link_product(category_id) # кешируем
-        self.products = Product.objects.filter(category_id=category_id).select_related('category') if category_id != None else Product.objects.all().select_related('category')
+        self.products = Product.objects.filter(category_id=category_id).select_related(
+            'category') if category_id != None else Product.objects.all().select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductsListView, self).get_context_data(**kwargs)
