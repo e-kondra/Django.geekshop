@@ -68,14 +68,14 @@ class ProductsListView(ListView, BaseClassContextMixin):
     def get_queryset(self):
         category_id = self.kwargs.get('pk', None)
         # self.products = get_link_product(category_id) # кешируем
-        self.products = Product.objects.filter(category_id=category_id).order_by('id').select_related(
-            'category') if category_id != None else Product.objects.all().order_by('id').select_related('category')
+        self.products = Product.objects.filter(category_id=category_id, is_active=True, category__is_active=True).order_by('id').select_related(
+            'category') if category_id != None else Product.objects.filter(is_active=True, category__is_active=True).order_by('id').select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductsListView, self).get_context_data(**kwargs)
         context['date'] = datetime.date.today()
         # context['categories'] = get_link_category()
-        context['categories'] = ProductCategory.objects.all()
+        context['categories'] = ProductCategory.objects.filter(is_active=True)
         page_id = self.kwargs.get('page_id', None)
         paginator = Paginator(self.products, per_page=3)
         try:

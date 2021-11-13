@@ -43,7 +43,7 @@
                         <div class="col-lg-12" style="margin-top: 33px;">
                             <form action="{% url 'admins:admins_category_delete' productcategory.id %}" method="post">
                                 {% csrf_token %}
-                                <input class="btn btn-danger btn-block" type="submit" value="Удалить">
+                                <input class="btn btn-danger btn-block" type="submit" value="Дизактивировать вместе с продуктами">
                             </form>
                         </div>
                     </div>

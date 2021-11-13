@@ -42,7 +42,7 @@ class UserCreateView(CreateView, CustomDispatchMixin):
     form_class = UserAdminRegisterForm  # какую форму используем(не вызываем, а просто передаем)
     success_url = reverse_lazy('admins:admins_user')  # куда перенаправить в случае успеха
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(UserCreateView, self).get_context_data(**kwargs)
         context['title'] = 'Админка | Регистрация'
         return context
@@ -54,10 +54,11 @@ class UserUpdateView(UpdateView, CustomDispatchMixin):
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admins_user')
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self,*, object_list=None, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Админка | Обновление пользователя'
         return context
+
 
 
 class UserDeleteView(DeleteView):
@@ -105,10 +106,10 @@ class CategoryUpdateView(UpdateView):
     success_url = reverse_lazy('admins:admins_categories')
     form_class = CategoryAdminUpdateForm
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CategoryUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Изменение категории'
-        return context
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super(CategoryUpdateView, self).get_context_data(**kwargs)
+    #     context['title'] = 'Админка | Изменение категории'
+    #     return context
 
     def form_valid(self, form):
         if 'discount' in form.cleaned_data:
